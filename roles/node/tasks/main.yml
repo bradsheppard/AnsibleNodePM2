@@ -1,0 +1,24 @@
+- name: Get NodeJS repo
+  shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+
+- name: Install NodeJS
+  apt:
+    name: nodejs
+    state: present
+
+- name: Install PM2
+  npm:
+    name: pm2
+    global: yes
+
+- name: Checkout NodeJS project
+  git:
+    repo: "{{ git_repo }}"
+    dest: /opt/NodeProject
+
+- name: Install node modules
+  npm:
+    path: /opt/NodeProject
+
+- name: Run NPM build
+  shell: cd /opt/NodeProject && pm2 start app.js
